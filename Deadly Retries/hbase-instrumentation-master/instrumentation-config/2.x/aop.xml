@@ -1,0 +1,13 @@
+<aspectj>
+<aspects>
+  <concrete-aspect name="pfl.HBaseInstrument" extends="pfl.AbstractHBaseInstrument">
+    <pointcut name="rpcSend" 
+      expression="execution(void org.apache.hadoop.hbase.ipc.RpcConnection+.sendRequest(org.apache.hadoop.hbase.ipc.Call, org.apache.hadoop.hbase.ipc.HBaseRpcController))"/>
+    <pointcut name="rpcReceive_processReq" 
+      expression="execution(void org.apache.hadoop.hbase.ipc.ServerRpcConnection.processRequest(..))"/>
+    <pointcut name="rpcReceive" 
+      expression="execution(* org.apache.hadoop.hbase.ipc.ServerRpcConnection+.createCall(..)) AND cflow(rpcReceive_processReq())"/>
+  </concrete-aspect>
+</aspects>
+</aspectj>
+

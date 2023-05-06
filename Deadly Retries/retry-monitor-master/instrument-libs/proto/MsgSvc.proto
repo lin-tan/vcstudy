@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+option java_package = "pfl.monitor";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "RpcParams.proto";
+
+service MsgSvc
+{
+    rpc Send (Log) returns (google.protobuf.Empty) {}
+    rpc SysFatalLog(Log4jEvent) returns (google.protobuf.Empty) {}
+    rpc Register (ClientServerBindInfo) returns (google.protobuf.Empty) {}
+}
+
+message ClientServerBindInfo
+{
+    string ip = 1;
+    int32 port = 2;
+    string nodeId = 3;
+}
+
+message RPCMessageProperties
+{
+    enum Direction
+    {
+        SEND = 0;
+        RECEIVE = 1;
+    }
+    Direction direction = 1;
+    string from = 2;
+    string to = 3;
+    string id = 4;
+    string method = 5;
+    RpcParams param = 6;
+}
+
+message CallLog
+{
+    enum Type
+    {
+        NORMAL = 0;
+        THREADPOOL_SUBMIT = 1;
+        THREADPOOL_EXECUTE = 2;
+        RUNNABLE_RUN = 3;
+        QUEUE_PUT = 4;
+        QUEUE_TAKE = 5;
+        RPC_RECEIVE = 6;
+        RPC_SEND = 7;
+        STATE_UPDATE = 8;
+        STATE_READ = 9;
+        STATE_INFO = 10;
+        FUNC_RETURN = 11;
+    }
+    Type type = 1;
+    string nodeId = 2;
+    int64 tid = 3;
+    string pointcut = 4;
+    string context = 5;
+    oneof property
+    {
+        RPCMessageProperties rpcProperty = 6;
+    }
+    repeated string stackTrace = 10;
+    string srcPos = 11;
+    google.protobuf.Timestamp timestamp = 12;
+}
+
+message Log
+{
+    repeated CallLog calls = 1;
+    string nodeId = 2;
+}
+
+message Log4jEvent
+{
+    enum Type
+    {
+        EVENT = 0;
+        RPC_ADDR = 1;
+        MAIN_CLASS = 2;
+    }
+    
+    enum Level
+    {
+        ERROR = 0;
+        FATAL = 1;
+        WARN = 2;
+        INFO = 3;
+        DEBUG = 4;
+        TRACE = 5;
+        OTHER = 6;
+    }
+    Type type = 1;
+    string nodeId = 2;
+    google.protobuf.Timestamp timestamp = 3;
+    Level level = 4;
+    string threadName = 5;
+    string className = 6;
+    string message = 7;
+}
+
+

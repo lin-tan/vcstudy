@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "pfl.monitor";
+
+message RpcParams
+{
+    int32 batchedCallDepth = 1; // 0: not a batched call
+    map<string, RepeatedParam> batchedParams = 2; // Identifier -> [Batched Params]
+    map<string, string> remainingParams = 3; // Remaining no-batched params for the batch call
+    string nonBatchParam = 4; // For non-bathced call only
+}
+
+message RepeatedParam
+{
+    repeated string params = 1;
+}

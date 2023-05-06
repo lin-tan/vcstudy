@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option java_package = "pfl.monitor";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/duration.proto";
+import "MsgSvc.proto";
+import "RpcParams.proto";
+
+service BlockRpcSvc
+{
+    rpc RequestRpcLog(RPCRequest) returns (Log) {} // Send RPC logs with MsgSvc.Send()
+    rpc BlockRpc(RPCsToBlock) returns (google.protobuf.Empty) {}
+}
+
+message RPCRequest
+{
+    google.protobuf.Timestamp timestamp = 1;
+    google.protobuf.Duration duration = 2; // Forward Duration
+    string toIP = 3;
+}
+
+message RPCToBlock
+{
+    string method = 1;
+    RpcParams param = 2;
+}
+
+message RPCsToBlock 
+{
+    repeated RPCToBlock rpcsToBlock = 1;
+}
