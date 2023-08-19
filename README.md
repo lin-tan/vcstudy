@@ -1,4 +1,4 @@
-# Dataset for ASE 2023 Submission "Vicious Cycles in Distributed Software Systems"
+# Dataset for the ASE 2023 Paper "Vicious Cycles in Distributed Software Systems" by Shangshu Qian, Wen Fan, Lin Tan, and Yongle Zhang. 
 
 The file [Vicious Cycle Dataset.ods](<Vicious Cycle Dataset.ods>) contains 33 vicious cycles from 13 open source systems studied in our paper.
 
